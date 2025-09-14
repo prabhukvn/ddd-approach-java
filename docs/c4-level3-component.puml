@@ -1,0 +1,24 @@
+@startuml C4_Component
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Component Diagram for FastCart Order System
+
+Person(customer, "Customer")
+System_Ext(paymentSystem, "Payment System")
+ContainerDb(database, "Database", "MySQL")
+
+Container_Boundary(c1, "Spring Boot Application") {
+    Component(controller, "Order Controller", "Spring REST Controller", "Handles HTTP requests for orders")
+    Component(appService, "Order Application Service", "Spring Service", "Orchestrates order operations")
+    Component(domainModel, "Order Domain Model", "Domain Entities & Value Objects", "Contains business logic and rules")
+    Component(repository, "Order Repository", "Spring Data JPA", "Provides data access for orders")
+}
+
+Rel(customer, controller, "Makes API calls", "HTTPS/REST")
+Rel(controller, appService, "Uses")
+Rel(appService, domainModel, "Uses")
+Rel(appService, repository, "Uses")
+Rel(repository, database, "Reads from and writes to", "JDBC")
+Rel(appService, paymentSystem, "Calls", "HTTPS")
+
+@enduml

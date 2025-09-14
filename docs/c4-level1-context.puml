@@ -1,0 +1,15 @@
+@startuml C4_Context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title System Context Diagram for FastCart Order Management
+
+Person(customer, "Customer", "A user who places orders")
+System(orderSystem, "FastCart Order System", "Manages customer orders and order items")
+System_Ext(paymentSystem, "Payment System", "Handles payment processing")
+SystemDb(database, "MySQL Database", "Stores order and product data")
+
+Rel(customer, orderSystem, "Places orders, adds items", "HTTPS/REST")
+Rel(orderSystem, paymentSystem, "Processes payments", "HTTPS")
+Rel(orderSystem, database, "Reads from and writes to", "JDBC")
+
+@enduml

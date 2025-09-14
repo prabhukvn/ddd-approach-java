@@ -1,0 +1,19 @@
+@startuml C4_Container
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+title Container Diagram for FastCart Order System
+
+Person(customer, "Customer", "A user who places orders")
+
+System_Boundary(c1, "FastCart Order System") {
+    Container(webApp, "Spring Boot Application", "Java, Spring Boot", "Provides REST API for order management")
+    ContainerDb(database, "Database", "MySQL", "Stores orders, order items, and related data")
+}
+
+System_Ext(paymentSystem, "Payment System", "External payment processing")
+
+Rel(customer, webApp, "Makes API calls to", "HTTPS/REST")
+Rel(webApp, database, "Reads from and writes to", "JDBC")
+Rel(webApp, paymentSystem, "Processes payments via", "HTTPS")
+
+@enduml

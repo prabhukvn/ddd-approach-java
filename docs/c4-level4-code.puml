@@ -1,0 +1,38 @@
+@startuml C4_Code
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+title Code Diagram - Order Domain Model (DDD Structure)
+
+Container_Boundary(domain, "Domain Layer") {
+    Component(orderAggregate, "Order", "Aggregate Root", "Contains order business logic")
+    Component(orderItem, "OrderItem", "Value Object", "Immutable order item data")
+    Component(orderId, "OrderId", "Value Object", "Order identifier")
+    Component(productId, "ProductId", "Value Object", "Product identifier")
+    Component(quantity, "Quantity", "Value Object", "Item quantity with validation")
+    Component(domainRepo, "OrderRepository", "Interface", "Domain repository contract")
+}
+
+Container_Boundary(application, "Application Layer") {
+    Component(appService, "OrderApplicationService", "Service", "Coordinates domain operations")
+}
+
+Container_Boundary(infrastructure, "Infrastructure Layer") {
+    Component(repoImpl, "OrderRepositoryImpl", "Implementation", "JPA repository implementation")
+    Component(orderEntity, "OrderEntity", "JPA Entity", "Database mapping")
+}
+
+Container_Boundary(interfaces, "Interface Layer") {
+    Component(controller, "OrderController", "REST Controller", "HTTP endpoints")
+}
+
+Rel(controller, appService, "Uses")
+Rel(appService, orderAggregate, "Creates/Uses")
+Rel(appService, domainRepo, "Uses")
+Rel(orderAggregate, orderItem, "Contains")
+Rel(orderAggregate, orderId, "Has")
+Rel(orderItem, productId, "Has")
+Rel(orderItem, quantity, "Has")
+Rel(repoImpl, domainRepo, "Implements")
+Rel(repoImpl, orderEntity, "Uses")
+
+@enduml
